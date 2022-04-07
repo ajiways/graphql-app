@@ -3,7 +3,8 @@
 # ------------------------------------------------------
 
 type Author {
-  books: [Book!]!
+  """Books that was written by this author"""
+  books: [Book!]
 
   """Author first name"""
   firstName: String!
@@ -19,11 +20,28 @@ type Book {
   """Author of a book"""
   author: Author!
 
+  """Comments that was added to the book"""
+  comments: [Comment!]
+
   """Id of a book"""
   id: Int!
 
   """Title of a book"""
   title: String!
+}
+
+type Comment {
+  """Author of a comment"""
+  author: String!
+
+  """Id of a book that commented by"""
+  book: Book!
+
+  """Content of a comment"""
+  content: String!
+
+  """Id of a comment"""
+  id: Int!
 }
 
 input CreateAuthorInput {
@@ -42,18 +60,33 @@ input CreateBookInput {
   title: String!
 }
 
+input CreateCommentInput {
+  """Author of a comment"""
+  author: String!
+
+  """Id of a book that comment for"""
+  bookId: Int!
+
+  """Content of a comment"""
+  content: String!
+}
+
 type Mutation {
   createAuthor(createAuthorInput: CreateAuthorInput!): Author!
   createBook(createBookInput: CreateBookInput!): Book!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
   removeAuthor(id: Int!): Author!
   removeBook(id: Int!): Book!
+  removeComment(id: Int!): Comment!
   updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
   updateBook(updateBookInput: UpdateBookInput!): Book!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
 }
 
 type Query {
   author(id: Int!): Author!
   book(id: Int!): Book!
+  comment(id: Int!): Comment!
 }
 
 input UpdateAuthorInput {
@@ -76,4 +109,18 @@ input UpdateBookInput {
 
   """Title of a book"""
   title: String!
+}
+
+input UpdateCommentInput {
+  """Author of a comment"""
+  author: String
+
+  """Id of a book that comment for"""
+  bookId: Int
+
+  """New comment content"""
+  content: String!
+
+  """Id of comment that need to be updated"""
+  id: Int!
 }
