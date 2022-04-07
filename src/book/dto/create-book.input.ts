@@ -1,5 +1,5 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { IsAlpha } from 'class-validator';
+import { InputType, Field, Int } from '@nestjs/graphql';
+import { IsAlpha, IsNumber, Min } from 'class-validator';
 
 @InputType()
 export class CreateBookInput {
@@ -7,7 +7,8 @@ export class CreateBookInput {
   @Field(() => String, { description: 'Title of a book' })
   title: string;
 
-  @IsAlpha()
-  @Field(() => String, { description: 'Author of a book' })
-  author: string;
+  @IsNumber()
+  @Min(1)
+  @Field(() => Int, { description: 'Author of a book id' })
+  authorId: number;
 }

@@ -2,9 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Author {
+  books: [Book!]!
+
+  """Author first name"""
+  firstName: String!
+
+  """Author id"""
+  id: Int!
+
+  """Author last name"""
+  lastName: String!
+}
+
 type Book {
   """Author of a book"""
-  author: String!
+  author: Author!
 
   """Id of a book"""
   id: Int!
@@ -13,27 +26,50 @@ type Book {
   title: String!
 }
 
+input CreateAuthorInput {
+  """Author first name"""
+  firstName: String!
+
+  """Author last name"""
+  lastName: String!
+}
+
 input CreateBookInput {
-  """Author of a book"""
-  author: String!
+  """Author of a book id"""
+  authorId: Int!
 
   """Title of a book"""
   title: String!
 }
 
 type Mutation {
+  createAuthor(createAuthorInput: CreateAuthorInput!): Author!
   createBook(createBookInput: CreateBookInput!): Book!
+  removeAuthor(id: Int!): Author!
   removeBook(id: Int!): Book!
+  updateAuthor(updateAuthorInput: UpdateAuthorInput!): Author!
   updateBook(updateBookInput: UpdateBookInput!): Book!
 }
 
 type Query {
+  author(id: Int!): Author!
   book(id: Int!): Book!
 }
 
+input UpdateAuthorInput {
+  """Author first name"""
+  firstName: String!
+
+  """Id of author that needs to be updated"""
+  id: Int!
+
+  """Author last name"""
+  lastName: String!
+}
+
 input UpdateBookInput {
-  """Author of a book"""
-  author: String!
+  """Author of a book id"""
+  authorId: Int
 
   """Id of a book"""
   id: Int!

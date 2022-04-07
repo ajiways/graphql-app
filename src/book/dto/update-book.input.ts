@@ -8,10 +8,6 @@ export class UpdateBookInput extends PartialType(CreateBookInput) {
   @Field(() => String, { description: 'Title of a book' })
   title: string;
 
-  @IsAlpha()
-  @Field(() => String, { description: 'Author of a book' })
-  author: string;
-
   @IsNumber()
   @Min(1)
   @Field(() => Int, { description: 'Id of a book' })

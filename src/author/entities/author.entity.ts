@@ -1,5 +1,12 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Book } from '../../book/entities/book.entity';
 
 @ObjectType()
 @Entity('authors')
@@ -15,4 +22,9 @@ export class Author {
   @Column()
   @Field(() => String, { description: 'Author last name' })
   lastName: string;
+
+  @OneToMany(() => Book, (book) => book.author)
+  @Field(() => [Book])
+  @JoinColumn()
+  books: Book[];
 }
