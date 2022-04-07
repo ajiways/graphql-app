@@ -29,8 +29,8 @@ export class AuthorService {
     return candidate;
   }
 
-  async update(id: number, updateAuthorInput: UpdateAuthorInput) {
-    const candidate = await this.findOne(id);
+  async update(updateAuthorInput: UpdateAuthorInput) {
+    const candidate = await this.findOne(updateAuthorInput.id);
 
     return this.authorRepository.merge(candidate, updateAuthorInput);
   }
@@ -38,6 +38,6 @@ export class AuthorService {
   async remove(id: number) {
     const candidate = await this.findOne(id);
 
-    return this.authorRepository.delete(candidate);
+    return this.authorRepository.remove(candidate);
   }
 }

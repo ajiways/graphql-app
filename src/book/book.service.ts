@@ -35,8 +35,8 @@ export class BookService {
     return candidate;
   }
 
-  async update(id: number, updateBookInput: UpdateBookInput) {
-    const candidate = await this.findOne(id);
+  async update(updateBookInput: UpdateBookInput) {
+    const candidate = await this.findOne(updateBookInput.id);
 
     return this.bookRepository.merge(candidate, updateBookInput);
   }

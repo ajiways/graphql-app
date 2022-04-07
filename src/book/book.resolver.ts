@@ -25,7 +25,7 @@ export class BookResolver {
 
   @Mutation(() => Book)
   updateBook(@Args('updateBookInput') updateBookInput: UpdateBookInput) {
-    return this.bookService.update(updateBookInput.id, updateBookInput);
+    return this.bookService.update(updateBookInput);
   }
 
   @Mutation(() => Book)
