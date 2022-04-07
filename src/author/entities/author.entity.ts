@@ -24,7 +24,10 @@ export class Author {
   lastName: string;
 
   @OneToMany(() => Book, (book) => book.author)
-  @Field(() => [Book])
+  @Field(() => [Book], {
+    description: 'Books that was written by this author',
+    nullable: true,
+  })
   @JoinColumn()
   books: Book[];
 }

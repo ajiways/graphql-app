@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthorService } from '../author/author.service';
+import { Author } from '../author/entities/author.entity';
 import { CreateBookInput } from './dto/create-book.input';
 import { UpdateBookInput } from './dto/update-book.input';
 import { Book } from './entities/book.entity';
@@ -12,6 +13,14 @@ export class BookService {
     @InjectRepository(Book) private readonly bookRepository: Repository<Book>,
     private readonly authorService: AuthorService,
   ) {}
+
+  getAuthor(book: Book) {
+    return this.authorService.findByBooks([book]);
+  }
+
+  getAllByAuthor(author: Author) {
+    return this.bookRepository.find({ where: { author } });
+  }
 
   async create(createBookInput: CreateBookInput) {
     const author = await this.authorService.findOne(createBookInput.authorId);
