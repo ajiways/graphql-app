@@ -4,7 +4,6 @@ import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
-
 import { config } from 'dotenv';
 config();
 
@@ -23,8 +22,10 @@ export function getOrmConfig(): TypeOrmModuleOptions {
     migrationsTableName: 'migrations',
     namingStrategy: new SnakeNamingStrategy(),
     logging: 'all',
+    cli: {
+      migrationsDir: 'src/migrations',
+    },
     migrationsRun: true,
-    synchronize: true,
   };
 }
 

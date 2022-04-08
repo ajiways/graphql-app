@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { BookService } from '../book/book.service';
 import { Book } from '../book/entities/book.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
@@ -19,6 +19,10 @@ export class CommentService {
     return this.commentRepository.find({ where: { book } });
   }
 
+  getCommentsByIds(ids: number[]) {
+    return this.commentRepository.find({ where: { bookId: In(ids) } });
+  }
+
   async create(createCommentInput: CreateCommentInput) {
     const book = await this.bookService.findOne(createCommentInput.bookId);
 
@@ -26,6 +30,7 @@ export class CommentService {
       author: createCommentInput.author,
       content: createCommentInput.content,
       book,
+      bookId: book.id,
     });
   }
 

@@ -1,11 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Book } from '../../book/entities/book.entity';
 
 @Entity('comments')
@@ -19,8 +13,10 @@ export class Comment {
   @Field(() => String, { description: 'Author of a comment' })
   author: string;
 
+  @Column()
+  bookId: number;
+
   @ManyToOne(() => Book, (book) => book.comments)
-  @JoinColumn({ name: 'book_id', referencedColumnName: 'id' })
   @Field(() => Book, { description: 'Id of a book that commented by' })
   book: Book;
 

@@ -6,21 +6,19 @@ import {
   Int,
   ResolveField,
   Parent,
+  Context,
 } from '@nestjs/graphql';
 import { BookService } from './book.service';
 import { Book } from './entities/book.entity';
 import { CreateBookInput } from './dto/create-book.input';
 import { UpdateBookInput } from './dto/update-book.input';
 import { Comment } from '../comment/entities/comment.entity';
-import { CommentService } from '../comment/comment.service';
 import { Author } from '../author/entities/author.entity';
+import DataLoader from 'dataloader';
 
 @Resolver(() => Book)
 export class BookResolver {
-  constructor(
-    private readonly bookService: BookService,
-    private readonly commentsService: CommentService,
-  ) {}
+  constructor(private readonly bookService: BookService) {}
 
   @Mutation(() => Book)
   createBook(@Args('createBookInput') createBookInput: CreateBookInput) {
@@ -33,13 +31,16 @@ export class BookResolver {
   }
 
   @ResolveField(() => [Comment])
-  async comments(@Parent() book: Book) {
-    return await this.commentsService.getAllByBook(book);
+  async comments(
+    @Parent() book: Book,
+    @Context('commentsLoader') commentsLoader: DataLoader<number, Comment[]>,
+  ) {
+    return commentsLoader.load(book.id);
   }
 
   @ResolveField(() => Author)
   async author(@Parent() book: Book) {
-    return await this.bookService.getAuthor(book);
+    return await this.bookService.getAuthor(book.id);
   }
 
   @Query(() => Book, { name: 'book' })

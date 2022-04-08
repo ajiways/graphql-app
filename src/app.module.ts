@@ -7,15 +7,24 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfigAsync } from './config/typeorm';
 import { AuthorModule } from './author/author.module';
 import { CommentModule } from './comment/comment.module';
+import { commentsDataLoader } from './comment/coments.loader';
+import { CommentService } from './comment/comment.service';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      imports: [CommentModule, BookModule],
       driver: ApolloDriver,
-      playground: true,
-      autoSchemaFile: join(process.cwd(), 'src/schemas/schema.gql'),
-      sortSchema: true,
+      useFactory: (commentService: CommentService) => ({
+        playground: true,
+        autoSchemaFile: join(process.cwd(), 'src/schemas/schema.gql'),
+        sortSchema: true,
+        context: {
+          commentsLoader: commentsDataLoader(commentService),
+        },
+      }),
+      inject: [CommentService],
     }),
     BookModule,
     AuthorModule,

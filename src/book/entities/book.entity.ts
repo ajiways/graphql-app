@@ -21,9 +21,11 @@ export class Book {
   @Field(() => String, { description: 'Title of a book' })
   title: string;
 
+  @Column()
+  authorId: number;
+
   @ManyToOne(() => Author, (author) => author.books)
   @Field(() => Author, { description: 'Author of a book' })
-  @JoinColumn({ name: 'author_id', referencedColumnName: 'id' })
   author: Author;
 
   @OneToMany(() => Comment, (comment) => comment.book)
